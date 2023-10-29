@@ -8,7 +8,7 @@ import { compare } from 'bcrypt';
 export class LoginService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
   async create(createLoginDto: CreateLoginDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findFirst({
       where: {
         email: createLoginDto.email,
       },
