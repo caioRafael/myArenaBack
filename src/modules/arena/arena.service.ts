@@ -9,7 +9,7 @@ export class ArenaService {
   async create(createArenaDto: ArenaDto) {
     const user = await this.prisma.user.findFirst({
       where: {
-        id: createArenaDto.administrator.id,
+        id: createArenaDto.administrator.email,
       },
     });
 
@@ -51,8 +51,10 @@ export class ArenaService {
     return newArena;
   }
 
-  findAll() {
-    return `This action returns all arena`;
+  async findAll() {
+    const arenaList = await this.prisma.arena.findMany();
+
+    return arenaList;
   }
 
   findOne(id: number) {

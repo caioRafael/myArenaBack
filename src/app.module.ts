@@ -6,9 +6,10 @@ import { ArenaService } from './modules/arena/arena.service';
 import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { PrismaService } from './infra/database/prisma.service';
+import { LoginModule } from './modules/login/login.module';
 
 @Module({
-  imports: [ArenaModule],
+  imports: [ArenaModule, LoginModule],
   controllers: [AppController],
   providers: [
     AppService,

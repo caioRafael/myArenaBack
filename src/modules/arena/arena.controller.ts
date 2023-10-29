@@ -9,14 +9,15 @@ import {
 } from '@nestjs/common';
 import { ArenaService } from './arena.service';
 import ArenaDto from './dto/arena.dto';
+import { CreateArenaSchemaDTO } from './shcema/create-arena.schema';
 
 @Controller('arena')
 export class ArenaController {
   constructor(private readonly arenaService: ArenaService) {}
 
   @Post()
-  create(@Body() createArenaDto: ArenaDto) {
-    return this.arenaService.create(createArenaDto);
+  create(@Body() createArenaDto: CreateArenaSchemaDTO) {
+    return this.arenaService.create(createArenaDto as ArenaDto);
   }
 
   @Get()
