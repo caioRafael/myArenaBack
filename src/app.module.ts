@@ -7,9 +7,10 @@ import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { PrismaService } from './infra/database/prisma.service';
 import { LoginModule } from './modules/login/login.module';
+import { FieldsModule } from './modules/fields/fields.module';
 
 @Module({
-  imports: [ArenaModule, LoginModule],
+  imports: [ArenaModule, LoginModule, FieldsModule],
   controllers: [AppController],
   providers: [
     AppService,

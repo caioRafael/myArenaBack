@@ -21,6 +21,8 @@ model Arena {
   administratorId String @unique
   administrator   User   @relation(fields: [administratorId], references: [id])
 
+  fields Fields[]
+
   createdAt DateTime @default(now())
 
   @@map("arena")
@@ -37,4 +39,34 @@ model User {
   createdAt DateTime @default(now())
 
   @@map("user")
+}
+
+model Fields {
+  id      String   @id @default(uuid())
+  name    String
+  price   Float
+  openIn  DateTime
+  closeIn DateTime
+  sports  String
+
+  arenaId      String
+  arena        Arena          @relation(fields: [arenaId], references: [id])
+  ScheduleTime ScheduleTime[]
+
+  @@map("fields")
+}
+
+model ScheduleTime {
+  id          String   @id @default(uuid())
+  date        DateTime
+  hour        DateTime
+  amountHours Int
+  clientName  String
+  clientPhone String
+  sport       String
+
+  fieldId String
+  field   Fields @relation(fields: [fieldId], references: [id])
+
+  @@map("shcedule_time")
 }
