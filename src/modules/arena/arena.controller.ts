@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ArenaService } from './arena.service';
 import ArenaDto from './dto/arena.dto';
 import { CreateArenaSchemaDTO } from './shcema/create-arena.schema';
+import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
 
 @Controller('arena')
 export class ArenaController {
@@ -25,9 +27,15 @@ export class ArenaController {
     return this.arenaService.findAll();
   }
 
+  @UseGuards(AuthGuard)
+  @Get('user/:id')
+  findByUser(@Param('id') id: string) {
+    return this.arenaService.findByUser(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.arenaService.findOne(+id);
+    return this.arenaService.findOne(id);
   }
 
   @Patch(':id')

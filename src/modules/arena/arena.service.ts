@@ -57,7 +57,17 @@ export class ArenaService {
     return arenaList;
   }
 
-  findOne(id: number) {
+  async findByUser(userId: string) {
+    const arena = await this.prisma.arena.findFirst({
+      where: {
+        administratorId: userId,
+      },
+    });
+
+    return arena;
+  }
+
+  findOne(id: string) {
     return `This action returns a #${id} arena`;
   }
 
