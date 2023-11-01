@@ -60,6 +60,7 @@ model ScheduleTime {
   id          String   @id @default(uuid())
   date        DateTime
   hour        DateTime
+  endHour     DateTime
   amountHours Int
   clientName  String
   clientPhone String

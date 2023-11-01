@@ -8,9 +8,10 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import { PrismaService } from './infra/database/prisma.service';
 import { LoginModule } from './modules/login/login.module';
 import { FieldsModule } from './modules/fields/fields.module';
+import { ScheduleModule } from './modules/schedule/schedule.module';
 
 @Module({
-  imports: [ArenaModule, LoginModule, FieldsModule],
+  imports: [ArenaModule, LoginModule, FieldsModule, ScheduleModule],
   controllers: [AppController],
   providers: [
     AppService,
