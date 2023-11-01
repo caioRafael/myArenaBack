@@ -2,43 +2,58 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import ScheduleDto from './dto/schedule.dto';
 import { PrismaService } from '../../infra/database/prisma.service';
 import isHourBetween from 'src/utils/isHourBetween';
+import { mutateDate, mutateTime } from 'src/utils/manipulateDateTime';
+import verifyConflitDate from 'src/utils/verifyConflitDate';
 @Injectable()
 export class ScheduleService {
   constructor(private prisma: PrismaService) {}
   async create(createScheduleDto: ScheduleDto) {
+    const newHour = mutateTime(new Date(createScheduleDto.hour));
+
+    const newEndHour = mutateTime(new Date(createScheduleDto.hour));
+    newEndHour.setHours(newEndHour.getHours() + createScheduleDto.amountHours);
+
+    const scheduleDate = mutateDate(new Date(createScheduleDto.date));
+
     const field = await this.prisma.fields.findUnique({
       where: {
         id: createScheduleDto.fieldId,
+      },
+      include: {
+        ScheduleTime: {
+          where: {
+            date: scheduleDate,
+          },
+        },
       },
     });
 
     if (!field)
       throw new HttpException('Quadra não encontrada', HttpStatus.BAD_REQUEST);
 
-    const endHour = new Date(createScheduleDto.hour);
-    endHour.setHours(endHour.getHours() + createScheduleDto.amountHours);
-
     const validateHours =
       isHourBetween(
         field.openIn,
         field.closeIn,
         new Date(createScheduleDto.hour),
-      ) && isHourBetween(field.openIn, field.closeIn, new Date(endHour));
+      ) && isHourBetween(field.openIn, field.closeIn, new Date(newEndHour));
 
-    const scheduleDate = new Date(createScheduleDto.date);
-    scheduleDate.setHours(-3, 0, 0, 0);
+    const validateCompatibilityHour = verifyConflitDate(field.ScheduleTime, {
+      hour: newHour,
+      endHour: newEndHour,
+    });
 
-    if (validateHours) {
+    if (validateHours && !validateCompatibilityHour) {
       const squedule = await this.prisma.scheduleTime.create({
         data: {
           clientName: createScheduleDto.clientName,
           clientPhone: createScheduleDto.clientPhone,
           amountHours: createScheduleDto.amountHours,
           date: scheduleDate,
-          hour: createScheduleDto.hour,
+          hour: newHour,
           fieldId: createScheduleDto.fieldId,
           sport: createScheduleDto.sport,
-          endHour: endHour,
+          endHour: newEndHour,
         },
       });
 
