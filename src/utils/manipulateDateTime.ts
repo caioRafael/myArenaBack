@@ -1,6 +1,7 @@
 export function mutateDate(date: Date): Date {
   const updateDate = date;
-  updateDate.setHours(-3, 0, 0, 0);
+  updateDate.setHours(0, 0, 0, 0);
+  console.log(updateDate);
   return updateDate;
 }
 

@@ -7,9 +7,11 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import ScheduleDto from './dto/schedule.dto';
+import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
 
 interface QueryParam {
   date: string;
@@ -25,8 +27,19 @@ export class ScheduleController {
   }
 
   @Get('field/:fieldId')
-  findByfield(@Param('fieldId') fieldId: string, @Query() param: QueryParam) {
+  findByField(@Param('fieldId') fieldId: string, @Query() param: QueryParam) {
     return this.scheduleService.FindByField(fieldId, new Date(param.date));
+  }
+
+  @Get('arena/:arenaId')
+  findByArena(@Param('arenaId') arenaId: string, @Query() param: QueryParam) {
+    return this.scheduleService.FindByArena(arenaId, new Date(param.date));
+  }
+
+  @UseGuards(AuthGuard)
+  @Get(':date')
+  findByDate(@Param('date') date: string) {
+    return this.scheduleService.FindByDate(new Date(date));
   }
 
   @Get()

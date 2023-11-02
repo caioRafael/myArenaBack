@@ -8,9 +8,9 @@ import verifyConflitDate from 'src/utils/verifyConflitDate';
 export class ScheduleService {
   constructor(private prisma: PrismaService) {}
   async create(createScheduleDto: ScheduleDto) {
-    const newHour = mutateTime(new Date(createScheduleDto.hour));
+    const newHour = new Date(createScheduleDto.hour);
 
-    const newEndHour = mutateTime(new Date(createScheduleDto.hour));
+    const newEndHour = new Date(createScheduleDto.hour);
     newEndHour.setHours(newEndHour.getHours() + createScheduleDto.amountHours);
 
     const scheduleDate = mutateDate(new Date(createScheduleDto.date));
@@ -39,8 +39,8 @@ export class ScheduleService {
       ) && isHourBetween(field.openIn, field.closeIn, new Date(newEndHour));
 
     const validateCompatibilityHour = verifyConflitDate(field.ScheduleTime, {
-      hour: newHour,
-      endHour: newEndHour,
+      hour: mutateTime(new Date(newHour)),
+      endHour: mutateTime(new Date(newEndHour)),
     });
 
     if (validateHours && !validateCompatibilityHour) {
@@ -76,7 +76,37 @@ export class ScheduleService {
     return scheduleList;
   }
 
-  findAll() {
+  async FindByArena(arenaId: string, date?: Date) {
+    const scheduleList = await this.prisma.fields.findMany({
+      where: {
+        arenaId,
+      },
+      include: {
+        ScheduleTime: {
+          where: {
+            date,
+          },
+        },
+      },
+    });
+
+    return scheduleList;
+  }
+
+  async FindByDate(date: Date) {
+    const scheduleList = await this.prisma.scheduleTime.findMany({
+      where: {
+        date,
+      },
+      orderBy: {
+        hour: 'asc',
+      },
+    });
+
+    return scheduleList;
+  }
+
+  async findAll() {
     return `This action returns all schedule`;
   }
 
