@@ -4,6 +4,7 @@ import { PrismaService } from '../../infra/database/prisma.service';
 import isHourBetween from 'src/utils/isHourBetween';
 import { mutateDate, mutateTime } from 'src/utils/manipulateDateTime';
 import verifyConflitDate from 'src/utils/verifyConflitDate';
+import findTimes from 'src/utils/findTimes';
 @Injectable()
 export class ScheduleService {
   constructor(private prisma: PrismaService) {}
@@ -98,12 +99,32 @@ export class ScheduleService {
       where: {
         date,
       },
+      include: {
+        field: true,
+      },
       orderBy: {
         hour: 'asc',
       },
     });
 
     return scheduleList;
+  }
+
+  async findAvaliableTimes(fieldId: string, date?: Date) {
+    const field = await this.prisma.fields.findUnique({
+      where: {
+        id: fieldId,
+      },
+      include: {
+        ScheduleTime: {
+          where: {
+            date: date,
+          },
+        },
+      },
+    });
+
+    return findTimes(field);
   }
 
   async findAll() {

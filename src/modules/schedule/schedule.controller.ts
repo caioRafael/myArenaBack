@@ -31,6 +31,17 @@ export class ScheduleController {
     return this.scheduleService.FindByField(fieldId, new Date(param.date));
   }
 
+  @Get('times/:fieldId')
+  findAvaliableTimes(
+    @Param('fieldId') fieldId: string,
+    @Query() param: QueryParam,
+  ) {
+    return this.scheduleService.findAvaliableTimes(
+      fieldId,
+      new Date(param.date),
+    );
+  }
+
   @Get('arena/:arenaId')
   findByArena(@Param('arenaId') arenaId: string, @Query() param: QueryParam) {
     return this.scheduleService.FindByArena(arenaId, new Date(param.date));
