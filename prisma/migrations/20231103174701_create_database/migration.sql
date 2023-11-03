@@ -26,8 +26,8 @@ CREATE TABLE "fields" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "price" REAL NOT NULL,
-    "openIn" DATETIME NOT NULL,
-    "closeIn" DATETIME NOT NULL,
+    "openIn" REAL NOT NULL,
+    "closeIn" REAL NOT NULL,
     "sports" TEXT NOT NULL,
     "arenaId" TEXT NOT NULL,
     CONSTRAINT "fields_arenaId_fkey" FOREIGN KEY ("arenaId") REFERENCES "arena" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -37,8 +37,8 @@ CREATE TABLE "fields" (
 CREATE TABLE "shcedule_time" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "date" DATETIME NOT NULL,
-    "hour" DATETIME NOT NULL,
-    "endHour" DATETIME NOT NULL,
+    "hour" REAL NOT NULL,
+    "endHour" REAL NOT NULL,
     "amountHours" INTEGER NOT NULL,
     "clientName" TEXT NOT NULL,
     "clientPhone" TEXT NOT NULL,

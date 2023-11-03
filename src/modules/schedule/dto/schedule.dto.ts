@@ -3,8 +3,8 @@ import Entity from 'src/types/Entity';
 
 export default interface ScheduleDto extends Entity {
   date: Date;
-  hour: Date;
-  endHour?: Date;
+  hour: number;
+  endHour?: number;
   amountHours: number;
   clientName: string;
   clientPhone: string;

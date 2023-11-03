@@ -5,8 +5,8 @@ import Entity from 'src/types/Entity';
 export default interface FieldDto extends Entity {
   name: string;
   price: number;
-  openIn: Date;
-  closeIn: Date;
+  openIn: number;
+  closeIn: number;
   sports: string;
   arenaId: string;
   arena?: Arena;

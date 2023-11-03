@@ -1,11 +1,11 @@
 export default function isHourBetween(
-  openIn: Date,
-  closeIn: Date,
-  hour: Date,
+  openIn: number,
+  closeIn: number,
+  hour: number,
 ): boolean {
-  const openHour = openIn.getHours();
-  const closeHour = closeIn.getHours();
-  const hourToCheck = hour.getHours();
+  const openHour = openIn;
+  const closeHour = closeIn;
+  const hourToCheck = hour;
 
   return hourToCheck >= openHour && hourToCheck < closeHour;
 }

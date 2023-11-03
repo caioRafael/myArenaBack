@@ -42,11 +42,11 @@ model User {
 }
 
 model Fields {
-  id      String   @id @default(uuid())
+  id      String @id @default(uuid())
   name    String
   price   Float
-  openIn  DateTime
-  closeIn DateTime
+  openIn  Float
+  closeIn Float
   sports  String
 
   arenaId      String
@@ -59,8 +59,8 @@ model Fields {
 model ScheduleTime {
   id          String   @id @default(uuid())
   date        DateTime
-  hour        DateTime
-  endHour     DateTime
+  hour        Float
+  endHour     Float
   amountHours Int
   clientName  String
   clientPhone String

@@ -4,16 +4,11 @@ import { PrismaService } from '../../infra/database/prisma.service';
 import isHourBetween from 'src/utils/isHourBetween';
 import { mutateDate, mutateTime } from 'src/utils/manipulateDateTime';
 import verifyConflitDate from 'src/utils/verifyConflitDate';
-import findTimes from 'src/utils/findTimes';
+// import findTimes from 'src/utils/findTimes';
 @Injectable()
 export class ScheduleService {
   constructor(private prisma: PrismaService) {}
   async create(createScheduleDto: ScheduleDto) {
-    const newHour = new Date(createScheduleDto.hour);
-
-    const newEndHour = new Date(createScheduleDto.hour);
-    newEndHour.setHours(newEndHour.getHours() + createScheduleDto.amountHours);
-
     const scheduleDate = mutateDate(new Date(createScheduleDto.date));
 
     const field = await this.prisma.fields.findUnique({
@@ -33,28 +28,28 @@ export class ScheduleService {
       throw new HttpException('Quadra não encontrada', HttpStatus.BAD_REQUEST);
 
     const validateHours =
+      isHourBetween(field.openIn, field.closeIn, createScheduleDto.hour) &&
       isHourBetween(
         field.openIn,
         field.closeIn,
-        new Date(createScheduleDto.hour),
-      ) && isHourBetween(field.openIn, field.closeIn, new Date(newEndHour));
+        createScheduleDto.hour + createScheduleDto.amountHours,
+      );
 
     const validateCompatibilityHour = verifyConflitDate(field.ScheduleTime, {
-      hour: mutateTime(new Date(newHour)),
-      endHour: mutateTime(new Date(newEndHour)),
+      hour: createScheduleDto.hour,
+      endHour: createScheduleDto.hour + createScheduleDto.amountHours,
     });
-
-    if (validateHours && !validateCompatibilityHour) {
+    if (!validateCompatibilityHour && validateHours) {
       const squedule = await this.prisma.scheduleTime.create({
         data: {
           clientName: createScheduleDto.clientName,
           clientPhone: createScheduleDto.clientPhone,
           amountHours: createScheduleDto.amountHours,
           date: scheduleDate,
-          hour: newHour,
+          hour: createScheduleDto.hour,
           fieldId: createScheduleDto.fieldId,
           sport: createScheduleDto.sport,
-          endHour: newEndHour,
+          endHour: createScheduleDto.hour + createScheduleDto.amountHours,
         },
       });
 
@@ -78,16 +73,15 @@ export class ScheduleService {
   }
 
   async FindByArena(arenaId: string, date?: Date) {
-    const scheduleList = await this.prisma.fields.findMany({
+    const scheduleList = await this.prisma.scheduleTime.findMany({
       where: {
-        arenaId,
+        AND: [{ date: date }, { field: { arenaId: arenaId } }],
       },
       include: {
-        ScheduleTime: {
-          where: {
-            date,
-          },
-        },
+        field: true,
+      },
+      orderBy: {
+        hour: 'asc',
       },
     });
 
@@ -110,22 +104,22 @@ export class ScheduleService {
     return scheduleList;
   }
 
-  async findAvaliableTimes(fieldId: string, date?: Date) {
-    const field = await this.prisma.fields.findUnique({
-      where: {
-        id: fieldId,
-      },
-      include: {
-        ScheduleTime: {
-          where: {
-            date: date,
-          },
-        },
-      },
-    });
+  // async findAvaliableTimes(fieldId: string, date?: Date) {
+  //   const field = await this.prisma.fields.findUnique({
+  //     where: {
+  //       id: fieldId,
+  //     },
+  //     include: {
+  //       ScheduleTime: {
+  //         where: {
+  //           date: date,
+  //         },
+  //       },
+  //     },
+  //   });
 
-    return findTimes(field);
-  }
+  //   return findTimes(field);
+  // }
 
   async findAll() {
     return `This action returns all schedule`;
