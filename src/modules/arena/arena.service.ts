@@ -67,8 +67,14 @@ export class ArenaService {
     return arena;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} arena`;
+  async findOne(id: string) {
+    const arena = await this.prisma.arena.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return arena;
   }
 
   update(id: number, updateArenaDto: ArenaDto) {
