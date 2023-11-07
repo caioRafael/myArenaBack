@@ -30,7 +30,7 @@ export class FieldsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.fieldsService.findOne(+id);
+    return this.fieldsService.findOne(id);
   }
 
   @Patch(':id')

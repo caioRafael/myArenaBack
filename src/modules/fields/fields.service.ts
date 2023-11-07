@@ -29,8 +29,14 @@ export class FieldsService {
     return fields;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} field`;
+  async findOne(id: string) {
+    const field = await this.prisma.fields.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return field;
   }
 
   update(id: number, updateFieldDto: FieldDto) {
