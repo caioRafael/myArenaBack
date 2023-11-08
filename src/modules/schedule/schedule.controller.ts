@@ -72,4 +72,10 @@ export class ScheduleController {
   remove(@Param('id') id: string) {
     return this.scheduleService.remove(+id);
   }
+
+  @Get('report')
+  report() {
+    console.log('entrou');
+    return this.scheduleService.report();
+  }
 }

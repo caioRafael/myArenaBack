@@ -77,6 +77,34 @@ export class ArenaService {
     return arena;
   }
 
+  async monthReport(id: string) {
+    const dataAtual = new Date();
+    const mesAtual = dataAtual.getMonth() + 1; // +1 porque os meses em JavaScript vão de 0 a 11
+    const anoAtual = dataAtual.getFullYear();
+
+    const arenaReport = await this.prisma.fields.findMany({
+      where: {
+        arenaId: id,
+      },
+      include: {
+        _count: {
+          select: {
+            ScheduleTime: {
+              where: {
+                date: {
+                  gte: new Date(`${anoAtual}-${mesAtual}-01`),
+                  lt: new Date(`${anoAtual}-${mesAtual + 1}-01`),
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return arenaReport;
+  }
+
   update(id: number, updateArenaDto: ArenaDto) {
     return `This action updates a #${id} arena`;
   }

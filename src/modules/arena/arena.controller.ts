@@ -28,6 +28,12 @@ export class ArenaController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('report/:id')
+  report(@Param('id') id: string) {
+    return this.arenaService.monthReport(id);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('user/:id')
   findByUser(@Param('id') id: string) {
     return this.arenaService.findByUser(id);
