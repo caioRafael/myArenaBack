@@ -11,4 +11,13 @@ export default interface ScheduleDto extends Entity {
   sport: string;
   fieldId: string;
   field?: FieldDto;
+  price: number;
+  status:
+    | 'DOWN_PAYMENT'
+    | 'APPROVED'
+    | 'STARTED'
+    | 'FINISHED'
+    | 'FINAL_PAYMENT'
+    | 'CLOSED'
+    | string;
 }

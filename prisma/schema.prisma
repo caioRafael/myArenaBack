@@ -17,11 +17,10 @@ model Arena {
   cnpj          String? @unique
   phone         String  @unique
   address       String
+  logo          String?
 
-  administratorId String @unique
-  administrator   User   @relation(fields: [administratorId], references: [id])
-
-  fields Fields[]
+  fields    Fields[]
+  employees User[]
 
   createdAt DateTime @default(now())
 
@@ -29,13 +28,16 @@ model Arena {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       String  @id @default(uuid())
   name     String
   nickname String
-  email    String @unique
+  profile  String
+  avatar   String?
+  email    String  @unique
   password String
 
-  arena     Arena?
+  arenaId   String?
+  arena     Arena?   @relation(fields: [arenaId], references: [id])
   createdAt DateTime @default(now())
 
   @@map("user")
@@ -65,6 +67,8 @@ model ScheduleTime {
   clientName  String
   clientPhone String
   sport       String
+  price       Float
+  status      String
 
   fieldId String
   field   Fields @relation(fields: [fieldId], references: [id])

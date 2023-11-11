@@ -51,6 +51,8 @@ export class ScheduleService {
           fieldId: createScheduleDto.fieldId,
           sport: createScheduleDto.sport,
           endHour: createScheduleDto.hour + createScheduleDto.amountHours,
+          price: field.price * createScheduleDto.amountHours,
+          status: 'DOWN_PAYMENT',
         },
       });
 

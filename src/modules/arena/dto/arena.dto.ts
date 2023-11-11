@@ -5,6 +5,9 @@ export interface UserDto extends Entity {
   nickname: string;
   email: string;
   password: string;
+  avatar?: string;
+  arenaId?: string;
+  profile: 'ADMINISTRATOR' | 'EMPLOYEE' | 'CLIENT' | string;
 }
 
 export default interface ArenaDto extends Entity {
@@ -12,7 +15,10 @@ export default interface ArenaDto extends Entity {
   corporateName?: string;
   cnpj?: string;
   phone: string;
+  logo?: string;
   address: string;
-  administratorId?: string;
-  administrator: UserDto;
+  employees: UserDto[];
+  createdAt?: Date;
+  //administrador usado so na criação
+  administrator?: UserDto;
 }

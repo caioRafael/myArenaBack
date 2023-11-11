@@ -12,6 +12,9 @@ export class LoginService {
       where: {
         email: createLoginDto.email,
       },
+      include: {
+        arena: true,
+      },
     });
 
     if (!user) throw new UnauthorizedException();

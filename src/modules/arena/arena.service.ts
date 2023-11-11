@@ -31,24 +31,28 @@ export class ArenaService {
 
     const password = await hash(createArenaDto.administrator.password, 10);
 
-    const newUser = await this.prisma.user.create({
-      data: {
-        ...createArenaDto.administrator,
-        password,
-      },
-    });
-
     const newArena = await this.prisma.arena.create({
       data: {
         address: createArenaDto.address,
         fantasyName: createArenaDto.fantasyName,
         phone: createArenaDto.phone,
         corporateName: createArenaDto.corporateName,
-        cnpj: createArenaDto.cnpj,
-        administratorId: newUser.id,
+        cnpj: createArenaDto?.cnpj,
       },
     });
-    return newArena;
+
+    const newUser = await this.prisma.user.create({
+      data: {
+        email: createArenaDto.administrator.email,
+        name: createArenaDto.administrator.name,
+        nickname: createArenaDto.administrator.nickname,
+        password: password,
+        profile: 'ADMINISTRATOR',
+        arenaId: newArena.id,
+      },
+    });
+
+    if (newArena && newUser) return newArena;
   }
 
   async findAll() {
@@ -60,7 +64,14 @@ export class ArenaService {
   async findByUser(userId: string) {
     const arena = await this.prisma.arena.findFirst({
       where: {
-        administratorId: userId,
+        employees: {
+          some: {
+            id: userId,
+          },
+        },
+      },
+      include: {
+        employees: true,
       },
     });
 
@@ -101,6 +112,24 @@ export class ArenaService {
         },
       },
     });
+
+    // const teste = await this.prisma.scheduleTime.aggregate({
+    //   where: {
+    //     AND: [
+    //       { field: { arenaId: id } },
+    //       {
+    //         date: {
+    //           gte: new Date(`${anoAtual}-${mesAtual}-01`),
+    //           lt: new Date(`${anoAtual}-${mesAtual + 1}-01`),
+    //         },
+    //       },
+    //     ],
+    //   },
+    //   _sum: {
+    //     price: true,
+    //   },
+    //   _count: true,
+    // });
 
     return arenaReport;
   }
