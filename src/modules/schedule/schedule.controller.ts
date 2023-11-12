@@ -53,6 +53,11 @@ export class ScheduleController {
     return this.scheduleService.FindByDate(new Date(date));
   }
 
+  @Patch('/status/:id')
+  updateStatus(@Param('id') id: string, @Body() status: Partial<ScheduleDto>) {
+    return this.scheduleService.updateStatus(id, status.status);
+  }
+
   @Get()
   findAll() {
     return this.scheduleService.findAll();

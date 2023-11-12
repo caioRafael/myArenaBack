@@ -146,6 +146,19 @@ export class ScheduleService {
     return report;
   }
 
+  async updateStatus(id: string, status: string) {
+    const schedule = await this.prisma.scheduleTime.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status: status,
+      },
+    });
+
+    return schedule;
+  }
+
   async findAll() {
     return `This action returns all schedule`;
   }
