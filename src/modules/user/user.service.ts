@@ -33,8 +33,12 @@ export class UserService {
     return newUser;
   }
 
-  async findAll() {
-    const users = await this.prisma.user.findMany();
+  async findAll(arenaId: string) {
+    const users = await this.prisma.user.findMany({
+      where: {
+        arenaId,
+      },
+    });
 
     return users;
   }
