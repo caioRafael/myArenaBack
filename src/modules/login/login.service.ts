@@ -29,6 +29,7 @@ export class LoginService {
     const payload = {
       sub: user.id,
       username: user.nickname,
+      profile: user.profile,
     };
 
     const token = await this.jwtService.signAsync(payload);

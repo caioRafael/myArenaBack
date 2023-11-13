@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { PrismaService } from 'src/infra/database/prisma.service';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -26,8 +27,13 @@ export class UserService {
       );
     }
 
+    const password = await hash(createUserDto.password, 10);
+
     const newUser = await this.prisma.user.create({
-      data: createUserDto,
+      data: {
+        ...createUserDto,
+        password,
+      },
     });
 
     return newUser;

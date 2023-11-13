@@ -32,6 +32,7 @@ model User {
   name     String
   nickname String
   profile  String
+  phone    String?
   avatar   String?
   email    String  @unique
   password String
