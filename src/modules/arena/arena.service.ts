@@ -104,7 +104,11 @@ export class ArenaService {
               where: {
                 date: {
                   gte: new Date(`${anoAtual}-${mesAtual}-01`),
-                  lt: new Date(`${anoAtual}-${mesAtual + 1}-01`),
+                  lt: new Date(
+                    `${mesAtual + 1 === 13 ? anoAtual + 1 : anoAtual}-${
+                      mesAtual + 1 === 13 ? 1 : mesAtual + 1
+                    }-01`,
+                  ),
                 },
               },
             },

@@ -12,6 +12,7 @@ import {
 import { ScheduleService } from './schedule.service';
 import ScheduleDto from './dto/schedule.dto';
 import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
+import { ScheduleGateway } from './schedule.gateway';
 
 interface QueryParam {
   date: string;
@@ -19,10 +20,14 @@ interface QueryParam {
 
 @Controller('schedule')
 export class ScheduleController {
-  constructor(private readonly scheduleService: ScheduleService) {}
+  constructor(
+    private readonly scheduleService: ScheduleService,
+    private scheduleGatway: ScheduleGateway,
+  ) {}
 
   @Post()
   create(@Body() createScheduleDto: ScheduleDto) {
+    this.scheduleGatway.findSchedules();
     return this.scheduleService.create(createScheduleDto);
   }
 
@@ -80,7 +85,6 @@ export class ScheduleController {
 
   @Get('report')
   report() {
-    console.log('entrou');
     return this.scheduleService.report();
   }
 }

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArenaModule } from './modules/arena/arena.module';
 import { ArenaService } from './modules/arena/arena.service';
@@ -13,7 +12,7 @@ import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [ArenaModule, LoginModule, FieldsModule, ScheduleModule, UserModule],
-  controllers: [AppController],
+  controllers: [],
   providers: [
     AppService,
     ArenaService,
