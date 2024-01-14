@@ -11,6 +11,7 @@ async function bootstrap() {
     .setDescription('Api do sistema my arena')
     .setVersion('1.0')
     .addTag('arena')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

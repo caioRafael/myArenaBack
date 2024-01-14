@@ -11,12 +11,15 @@ import {
 import { FieldsService } from './fields.service';
 import FieldDto from './dto/field.dto';
 import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 ('./dto/field.dto');
 
+@ApiTags('fields')
 @Controller('fields')
 export class FieldsController {
   constructor(private readonly fieldsService: FieldsService) {}
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Post()
   create(@Body() createFieldDto: FieldDto) {

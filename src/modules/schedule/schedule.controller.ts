@@ -13,11 +13,13 @@ import { ScheduleService } from './schedule.service';
 import ScheduleDto from './dto/schedule.dto';
 import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
 import { ScheduleGateway } from './schedule.gateway';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 interface QueryParam {
   date: string;
 }
 
+@ApiTags('schedule')
 @Controller('schedule')
 export class ScheduleController {
   constructor(
@@ -52,6 +54,7 @@ export class ScheduleController {
     return this.scheduleService.FindByArena(arenaId, new Date(param.date));
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get(':date')
   findByDate(@Param('date') date: string) {
