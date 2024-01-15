@@ -66,26 +66,6 @@ export class ScheduleController {
     return this.scheduleService.updateStatus(id, status.status);
   }
 
-  @Get()
-  findAll() {
-    return this.scheduleService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.scheduleService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateScheduleDto: ScheduleDto) {
-    return this.scheduleService.update(+id, updateScheduleDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.scheduleService.remove(+id);
-  }
-
   @Get('report')
   report() {
     return this.scheduleService.report();

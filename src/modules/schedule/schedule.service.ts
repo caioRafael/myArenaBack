@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import ScheduleDto from './dto/schedule.dto';
 import { PrismaService } from '../../infra/database/prisma.service';
 import isHourBetween from 'src/utils/isHourBetween';
-import { mutateDate, mutateTime } from 'src/utils/manipulateDateTime';
+import { mutateDate } from 'src/utils/manipulateDateTime';
 import verifyConflitDate from 'src/utils/verifyConflitDate';
 import findHours from 'src/utils/findHours';
 // import findTimes from 'src/utils/findTimes';
@@ -157,21 +157,5 @@ export class ScheduleService {
     });
 
     return schedule;
-  }
-
-  async findAll() {
-    return `This action returns all schedule`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} schedule`;
-  }
-
-  update(id: number, updateScheduleDto: ScheduleDto) {
-    return `This action updates a #${id} schedule`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} schedule`;
   }
 }

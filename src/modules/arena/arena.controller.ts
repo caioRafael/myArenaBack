@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { ArenaService } from './arena.service';
 import ArenaDto from './dto/arena.dto';
 import {
@@ -58,15 +49,5 @@ export class ArenaController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.arenaService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArenaDto: ArenaDto) {
-    return this.arenaService.update(+id, updateArenaDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.arenaService.remove(+id);
   }
 }

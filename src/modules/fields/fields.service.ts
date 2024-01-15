@@ -38,12 +38,4 @@ export class FieldsService {
 
     return field;
   }
-
-  update(id: number, updateFieldDto: FieldDto) {
-    return `This action updates a #${id} field`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} field`;
-  }
 }

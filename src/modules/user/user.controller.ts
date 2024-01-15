@@ -11,7 +11,14 @@ import {
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
 import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import {
+  CreateUserSchemaDTO,
+  CreateUserSchema,
+} from './schema/create-user.schema';
+import { zodToOpenAPI } from 'nestjs-zod';
+
+const userSchemaSwagger = zodToOpenAPI(CreateUserSchema);
 
 @ApiTags('user')
 @Controller('user')
@@ -19,8 +26,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: UserDto) {
-    return this.userService.create(createUserDto);
+  @ApiBody({
+    schema: userSchemaSwagger,
+  })
+  create(@Body() createUserDto: CreateUserSchemaDTO) {
+    return this.userService.create(createUserDto as UserDto);
   }
 
   @ApiBearerAuth()

@@ -11,8 +11,14 @@ import {
 import { FieldsService } from './fields.service';
 import FieldDto from './dto/field.dto';
 import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-('./dto/field.dto');
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import {
+  CreateFieldSquemaDTO,
+  CreateFieldSquema,
+} from './schema/create-field.schema';
+import { zodToOpenAPI } from 'nestjs-zod';
+
+const fieldSchemaSwagger = zodToOpenAPI(CreateFieldSquema);
 
 @ApiTags('fields')
 @Controller('fields')
@@ -21,9 +27,12 @@ export class FieldsController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @ApiBody({
+    schema: fieldSchemaSwagger,
+  })
   @Post()
-  create(@Body() createFieldDto: FieldDto) {
-    return this.fieldsService.create(createFieldDto);
+  create(@Body() createFieldDto: CreateFieldSquemaDTO) {
+    return this.fieldsService.create(createFieldDto as FieldDto);
   }
 
   @Get('arena/:arenaId')
@@ -34,15 +43,5 @@ export class FieldsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.fieldsService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFieldDto: FieldDto) {
-    return this.fieldsService.update(+id, updateFieldDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.fieldsService.remove(+id);
   }
 }

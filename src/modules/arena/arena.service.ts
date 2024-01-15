@@ -117,32 +117,6 @@ export class ArenaService {
       },
     });
 
-    // const teste = await this.prisma.scheduleTime.aggregate({
-    //   where: {
-    //     AND: [
-    //       { field: { arenaId: id } },
-    //       {
-    //         date: {
-    //           gte: new Date(`${anoAtual}-${mesAtual}-01`),
-    //           lt: new Date(`${anoAtual}-${mesAtual + 1}-01`),
-    //         },
-    //       },
-    //     ],
-    //   },
-    //   _sum: {
-    //     price: true,
-    //   },
-    //   _count: true,
-    // });
-
     return arenaReport;
-  }
-
-  update(id: number, updateArenaDto: ArenaDto) {
-    return `This action updates a #${id} arena`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} arena`;
   }
 }
