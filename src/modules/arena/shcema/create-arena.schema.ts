@@ -8,6 +8,9 @@ export const CreateUserSquema = z.object({
   nickname: z.string({
     required_error: 'nickname is required',
   }),
+  phone: z.string({
+    required_error: 'phone is required',
+  }),
   email: z
     .string({
       required_error: 'administrator email is required',
@@ -31,6 +34,8 @@ export const CreateArenaSquema = z.object({
     required_error: 'phone is required',
   }),
   address: z.string(),
+  pixKey: z.string(),
+  requirePrePayment: z.boolean(),
 });
 
 export class CreateArenaSchemaDTO extends createZodDto(CreateArenaSquema) {}

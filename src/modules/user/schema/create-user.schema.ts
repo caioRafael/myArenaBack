@@ -15,6 +15,9 @@ export const CreateUserSchema = z.object({
     .email({
       message: 'invalid email',
     }),
+  phone: z.string({
+    required_error: 'phone is required',
+  }),
   password: z.string({
     required_error: 'password is required',
   }),

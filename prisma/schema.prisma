@@ -6,18 +6,20 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Arena {
-  id            String  @id @default(uuid())
-  fantasyName   String
-  corporateName String? @unique
-  cnpj          String? @unique
-  phone         String  @unique
-  address       String
-  logo          String?
+  id                String  @id @default(uuid())
+  fantasyName       String
+  corporateName     String? @unique
+  cnpj              String? @unique
+  phone             String  @unique
+  address           String
+  logo              String?
+  pixKey            String?
+  requirePrePayment Boolean
 
   fields    Fields[]
   employees User[]
@@ -32,14 +34,15 @@ model User {
   name     String
   nickname String
   profile  String
-  phone    String?
+  phone    String
   avatar   String?
   email    String  @unique
   password String
 
-  arenaId   String?
-  arena     Arena?   @relation(fields: [arenaId], references: [id])
-  createdAt DateTime @default(now())
+  arenaId      String?
+  arena        Arena?        @relation(fields: [arenaId], references: [id])
+  createdAt    DateTime      @default(now())
+  ScheduleTime ScheduleTime?
 
   @@map("user")
 }
@@ -65,11 +68,13 @@ model ScheduleTime {
   hour        Float
   endHour     Float
   amountHours Int
-  clientName  String
-  clientPhone String
   sport       String
   price       Float
   status      String
+  code        String   @unique
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
 
   fieldId String
   field   Fields @relation(fields: [fieldId], references: [id])

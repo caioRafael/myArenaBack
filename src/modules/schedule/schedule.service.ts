@@ -5,6 +5,7 @@ import isHourBetween from 'src/utils/isHourBetween';
 import { mutateDate } from 'src/utils/manipulateDateTime';
 import verifyConflitDate from 'src/utils/verifyConflitDate';
 import findHours from 'src/utils/findHours';
+import FieldDto from '../fields/dto/field.dto';
 // import findTimes from 'src/utils/findTimes';
 @Injectable()
 export class ScheduleService {
@@ -22,6 +23,7 @@ export class ScheduleService {
             date: scheduleDate,
           },
         },
+        arena: true,
       },
     });
 
@@ -36,15 +38,17 @@ export class ScheduleService {
         createScheduleDto.hour + createScheduleDto.amountHours,
       );
 
-    const validateCompatibilityHour = verifyConflitDate(field.ScheduleTime, {
-      hour: createScheduleDto.hour,
-      endHour: createScheduleDto.hour + createScheduleDto.amountHours,
-    });
+    const validateCompatibilityHour = verifyConflitDate(
+      field.ScheduleTime as ScheduleDto[],
+      {
+        hour: createScheduleDto.hour,
+        endHour: createScheduleDto.hour + createScheduleDto.amountHours,
+      },
+    );
     if (!validateCompatibilityHour && validateHours) {
       const squedule = await this.prisma.scheduleTime.create({
         data: {
-          clientName: createScheduleDto.clientName,
-          clientPhone: createScheduleDto.clientPhone,
+          userId: createScheduleDto.userId,
           amountHours: createScheduleDto.amountHours,
           date: scheduleDate,
           hour: createScheduleDto.hour,
@@ -53,6 +57,7 @@ export class ScheduleService {
           endHour: createScheduleDto.hour + createScheduleDto.amountHours,
           price: field.price * createScheduleDto.amountHours,
           status: 'DOWN_PAYMENT',
+          code: Math.floor(Date.now() * Math.random()).toString(16),
         },
       });
 
@@ -63,6 +68,8 @@ export class ScheduleService {
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    // return field;
   }
 
   async FindByField(fieldId: string, date?: Date) {
@@ -121,7 +128,7 @@ export class ScheduleService {
       },
     });
 
-    return findHours(field);
+    return findHours(field as FieldDto);
   }
 
   async report() {
