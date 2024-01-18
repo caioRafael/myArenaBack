@@ -1,4 +1,4 @@
-import { Arena } from 'src/modules/arena/entities/arena.entity';
+import ArenaDto from 'src/modules/arena/dto/arena.dto';
 import ScheduleDto from 'src/modules/schedule/dto/schedule.dto';
 import Entity from 'src/types/Entity';
 
@@ -9,6 +9,6 @@ export default interface FieldDto extends Entity {
   closeIn: number;
   sports: string;
   arenaId: string;
-  arena?: Arena;
+  arena?: ArenaDto;
   ScheduleTime?: ScheduleDto[];
 }

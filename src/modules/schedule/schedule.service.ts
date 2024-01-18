@@ -68,8 +68,6 @@ export class ScheduleService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    // return field;
   }
 
   async FindByField(fieldId: string, date?: Date) {
