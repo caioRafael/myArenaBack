@@ -2,9 +2,11 @@ import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 export const CreateScheduleSchema = z.object({
-  date: z.date({
-    required_error: 'date is required',
-  }),
+  date: z
+    .string({
+      required_error: 'date is required',
+    })
+    .transform((item) => new Date(item)),
   hour: z.number({
     required_error: 'hour is required',
   }),
@@ -16,6 +18,9 @@ export const CreateScheduleSchema = z.object({
   }),
   fieldId: z.string({
     required_error: 'select a field',
+  }),
+  userId: z.string({
+    required_error: 'user is required',
   }),
 });
 

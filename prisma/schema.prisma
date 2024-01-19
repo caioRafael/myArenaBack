@@ -40,9 +40,9 @@ model User {
   password String
 
   arenaId      String?
-  arena        Arena?        @relation(fields: [arenaId], references: [id])
-  createdAt    DateTime      @default(now())
-  ScheduleTime ScheduleTime?
+  arena        Arena?         @relation(fields: [arenaId], references: [id])
+  createdAt    DateTime       @default(now())
+  ScheduleTime ScheduleTime[]
 
   @@map("user")
 }
@@ -73,7 +73,7 @@ model ScheduleTime {
   status      String
   code        String   @unique
 
-  userId String @unique
+  userId String
   user   User   @relation(fields: [userId], references: [id])
 
   fieldId String

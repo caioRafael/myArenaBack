@@ -27,7 +27,6 @@ export class ScheduleGateway {
     //   new Date(data.date),
     // );
     // console.log('agendamento', schedules);
-    console.log('teste');
     this.server.emit('findSchedules', true);
   }
 }

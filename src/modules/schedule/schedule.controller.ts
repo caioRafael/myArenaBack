@@ -21,6 +21,7 @@ import {
 
 interface QueryParam {
   date: string;
+  code?: string;
 }
 
 const scheduleSchemaSwagger = zodToOpenAPI(CreateScheduleSchema);
@@ -65,7 +66,11 @@ export class ScheduleController {
   @UseGuards(AuthGuard)
   @Get('arena/:arenaId')
   findByArena(@Param('arenaId') arenaId: string, @Query() param: QueryParam) {
-    return this.scheduleService.FindByArena(arenaId, new Date(param.date));
+    return this.scheduleService.FindByArena(
+      arenaId,
+      new Date(param.date),
+      param.code,
+    );
   }
 
   @ApiBearerAuth()
@@ -87,5 +92,12 @@ export class ScheduleController {
   @Get('report')
   report() {
     return this.scheduleService.report();
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('code/:code')
+  getByCode(@Param('code') code: string) {
+    return this.scheduleService.findByCode(code);
   }
 }

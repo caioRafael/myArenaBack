@@ -80,13 +80,18 @@ export class ScheduleService {
     return scheduleList;
   }
 
-  async FindByArena(arenaId: string, date?: Date) {
+  async FindByArena(arenaId: string, date?: Date, code?: string) {
+    const data = {
+      date,
+      code,
+    };
     const scheduleList = await this.prisma.scheduleTime.findMany({
       where: {
-        AND: [{ date: date }, { field: { arenaId: arenaId } }],
+        AND: [data, { field: { arenaId: arenaId } }],
       },
       include: {
         field: true,
+        user: true,
       },
       orderBy: {
         hour: 'asc',
@@ -130,7 +135,6 @@ export class ScheduleService {
   }
 
   async report() {
-    console.log('entrou');
     const dataAtual = new Date();
     const mesAtual = dataAtual.getMonth() + 1; // +1 porque os meses em JavaScript vão de 0 a 11
     const anoAtual = dataAtual.getFullYear();
@@ -158,6 +162,20 @@ export class ScheduleService {
       },
       data: {
         status: status,
+      },
+    });
+
+    return schedule;
+  }
+
+  async findByCode(code: string) {
+    const schedule = await this.prisma.scheduleTime.findUnique({
+      where: {
+        code,
+      },
+      include: {
+        user: true,
+        field: true,
       },
     });
 
