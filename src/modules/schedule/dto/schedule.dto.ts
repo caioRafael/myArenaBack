@@ -1,4 +1,5 @@
 import FieldDto from 'src/modules/fields/dto/field.dto';
+import { UserDto } from 'src/modules/user/dto/user.dto';
 import Entity from 'src/types/Entity';
 
 export default interface ScheduleDto extends Entity {
@@ -6,12 +7,13 @@ export default interface ScheduleDto extends Entity {
   hour: number;
   endHour?: number;
   amountHours: number;
-  clientName: string;
-  clientPhone: string;
+  userId: string;
+  user: UserDto;
   sport: string;
   fieldId: string;
   field?: FieldDto;
   price: number;
+  code?: string;
   status:
     | 'DOWN_PAYMENT'
     | 'APPROVED'

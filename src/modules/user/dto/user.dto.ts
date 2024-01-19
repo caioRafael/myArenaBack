@@ -5,6 +5,7 @@ export interface UserDto extends Entity {
   nickname: string;
   email: string;
   password: string;
+  phone: string;
   avatar?: string;
   arenaId?: string;
   profile: 'ADMINISTRATOR' | 'EMPLOYEE' | 'CLIENT' | string;

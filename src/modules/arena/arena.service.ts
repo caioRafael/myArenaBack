@@ -38,6 +38,8 @@ export class ArenaService {
         phone: createArenaDto.phone,
         corporateName: createArenaDto.corporateName,
         cnpj: createArenaDto?.cnpj,
+        pixKey: createArenaDto?.pixKey,
+        requirePrePayment: createArenaDto.requirePrePayment,
       },
     });
 
@@ -49,6 +51,7 @@ export class ArenaService {
         password: password,
         profile: 'ADMINISTRATOR',
         arenaId: newArena.id,
+        phone: createArenaDto.administrator.phone,
       },
     });
 

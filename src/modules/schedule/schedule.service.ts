@@ -5,6 +5,7 @@ import isHourBetween from 'src/utils/isHourBetween';
 import { mutateDate } from 'src/utils/manipulateDateTime';
 import verifyConflitDate from 'src/utils/verifyConflitDate';
 import findHours from 'src/utils/findHours';
+import FieldDto from '../fields/dto/field.dto';
 // import findTimes from 'src/utils/findTimes';
 @Injectable()
 export class ScheduleService {
@@ -22,6 +23,7 @@ export class ScheduleService {
             date: scheduleDate,
           },
         },
+        arena: true,
       },
     });
 
@@ -36,15 +38,17 @@ export class ScheduleService {
         createScheduleDto.hour + createScheduleDto.amountHours,
       );
 
-    const validateCompatibilityHour = verifyConflitDate(field.ScheduleTime, {
-      hour: createScheduleDto.hour,
-      endHour: createScheduleDto.hour + createScheduleDto.amountHours,
-    });
+    const validateCompatibilityHour = verifyConflitDate(
+      field.ScheduleTime as ScheduleDto[],
+      {
+        hour: createScheduleDto.hour,
+        endHour: createScheduleDto.hour + createScheduleDto.amountHours,
+      },
+    );
     if (!validateCompatibilityHour && validateHours) {
       const squedule = await this.prisma.scheduleTime.create({
         data: {
-          clientName: createScheduleDto.clientName,
-          clientPhone: createScheduleDto.clientPhone,
+          userId: createScheduleDto.userId,
           amountHours: createScheduleDto.amountHours,
           date: scheduleDate,
           hour: createScheduleDto.hour,
@@ -53,6 +57,7 @@ export class ScheduleService {
           endHour: createScheduleDto.hour + createScheduleDto.amountHours,
           price: field.price * createScheduleDto.amountHours,
           status: 'DOWN_PAYMENT',
+          code: Math.floor(Date.now() * Math.random()).toString(16),
         },
       });
 
@@ -75,13 +80,18 @@ export class ScheduleService {
     return scheduleList;
   }
 
-  async FindByArena(arenaId: string, date?: Date) {
+  async FindByArena(arenaId: string, date?: Date, code?: string) {
+    const data = {
+      date,
+      code,
+    };
     const scheduleList = await this.prisma.scheduleTime.findMany({
       where: {
-        AND: [{ date: date }, { field: { arenaId: arenaId } }],
+        AND: [data, { field: { arenaId: arenaId } }],
       },
       include: {
         field: true,
+        user: true,
       },
       orderBy: {
         hour: 'asc',
@@ -121,11 +131,10 @@ export class ScheduleService {
       },
     });
 
-    return findHours(field);
+    return findHours(field as FieldDto);
   }
 
   async report() {
-    console.log('entrou');
     const dataAtual = new Date();
     const mesAtual = dataAtual.getMonth() + 1; // +1 porque os meses em JavaScript vão de 0 a 11
     const anoAtual = dataAtual.getFullYear();
@@ -153,6 +162,20 @@ export class ScheduleService {
       },
       data: {
         status: status,
+      },
+    });
+
+    return schedule;
+  }
+
+  async findByCode(code: string) {
+    const schedule = await this.prisma.scheduleTime.findUnique({
+      where: {
+        code,
+      },
+      include: {
+        user: true,
+        field: true,
       },
     });
 
