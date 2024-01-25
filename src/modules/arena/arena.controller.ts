@@ -37,8 +37,15 @@ export class ArenaController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('report/:id')
-  report(@Param('id') id: string) {
-    return this.arenaService.monthReport(id);
+  async report(@Param('id') id: string) {
+    const data = await this.arenaService.monthReport(id);
+    //data is bigInt => parse to json
+    return JSON.parse(
+      JSON.stringify(
+        data,
+        (key, value) => (typeof value === 'bigint' ? value.toString() : value), // return everything else unchanged
+      ),
+    );
   }
 
   @ApiBearerAuth()
