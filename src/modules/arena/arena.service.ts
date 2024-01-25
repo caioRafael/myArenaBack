@@ -96,30 +96,52 @@ export class ArenaService {
     const mesAtual = dataAtual.getMonth() + 1; // +1 porque os meses em JavaScript vão de 0 a 11
     const anoAtual = dataAtual.getFullYear();
 
-    const arenaReport = await this.prisma.fields.findMany({
-      where: {
-        arenaId: id,
-      },
-      include: {
-        _count: {
-          select: {
-            ScheduleTime: {
-              where: {
-                date: {
-                  gte: new Date(`${anoAtual}-${mesAtual}-01`),
-                  lt: new Date(
-                    `${mesAtual + 1 === 13 ? anoAtual + 1 : anoAtual}-${
-                      mesAtual + 1 === 13 ? 1 : mesAtual + 1
-                    }-01`,
-                  ),
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    // const arenaReport = await this.prisma.fields.findMany({
+    //   where: {
+    //     arenaId: id,
+    //   },
+    //   include: {
+    //     _count: {
+    //       select: {
+    //         ScheduleTime: {
+    //           where: {
+    //             date: {
+    //               gte: new Date(`${anoAtual}-${mesAtual}-01`),
+    //               lt: new Date(
+    //                 `${mesAtual + 1 === 13 ? anoAtual + 1 : anoAtual}-${
+    //                   mesAtual + 1 === 13 ? 1 : mesAtual + 1
+    //                 }-01`,
+    //               ),
+    //             },
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
 
-    return arenaReport;
+    const arenaReport = await this.prisma.$queryRaw`
+      SELECT 
+        count(*) as schedules, 
+        SUM(fields.price) as espec,
+        SUM(CASE 
+            WHEN shcedule_time.status IN ('APPROVED', 'STARTED', 'FINISHED')
+            THEN fields.price / 2 
+            WHEN shcedule_time.status IN ('FINAL_PAYMENT', 'CLOSED')
+            THEN fields.price
+            ELSE 0 END) as revenue
+      FROM fields 
+        LEFT JOIN shcedule_time on fields.id = shcedule_time."fieldId"
+        WHERE fields."arenaId" = ${id}
+        AND shcedule_time.date BETWEEN ${new Date(
+          `${anoAtual}-${mesAtual}-01`,
+        )} AND ${new Date(
+      `${mesAtual + 1 === 13 ? anoAtual + 1 : anoAtual}-${
+        mesAtual + 1 === 13 ? 1 : mesAtual + 1
+      }-01`,
+    )}`;
+
+    // console.log(arenaReport);
+    return arenaReport[0];
   }
 }
