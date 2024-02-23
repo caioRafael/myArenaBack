@@ -9,12 +9,26 @@ export class ArenaService {
   async create(createArenaDto: ArenaDto) {
     const user = await this.prisma.user.findFirst({
       where: {
-        id: createArenaDto.administrator.email,
+        OR: [
+          { id: createArenaDto.administrator.email },
+          {
+            phone: createArenaDto.administrator.phone,
+          },
+        ],
       },
     });
 
-    if (user)
-      throw new HttpException('Usuário ja existe', HttpStatus.BAD_REQUEST);
+    if (user && user.email === createArenaDto.administrator.email)
+      throw new HttpException(
+        'Esse e-mail ja está cadastrado',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (user && user.phone === createArenaDto.administrator.phone)
+      throw new HttpException(
+        'Já existe um usuário com esse número de telefone cadastrado',
+        HttpStatus.BAD_REQUEST,
+      );
 
     const arena = await this.prisma.arena.findFirst({
       where: {
@@ -26,8 +40,23 @@ export class ArenaService {
       },
     });
 
-    if (arena)
-      throw new HttpException('Arena ja existe', HttpStatus.BAD_REQUEST);
+    if (arena && arena.cnpj === createArenaDto.cnpj)
+      throw new HttpException(
+        'Esse CNPJ já está cadastrado',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (arena && arena.corporateName === createArenaDto.corporateName)
+      throw new HttpException(
+        'Essa razão social já está cadastrada',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    if (arena && arena.phone === createArenaDto.phone)
+      throw new HttpException(
+        'Já existe uma arena com esse número de telefone cadastrado',
+        HttpStatus.BAD_REQUEST,
+      );
 
     const password = await hash(createArenaDto.administrator.password, 10);
 
