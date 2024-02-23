@@ -10,10 +10,8 @@ export class ArenaService {
     const user = await this.prisma.user.findFirst({
       where: {
         OR: [
-          { id: createArenaDto.administrator.email },
-          {
-            phone: createArenaDto.administrator.phone,
-          },
+          { email: createArenaDto.administrator.email },
+          { phone: createArenaDto.administrator.phone },
         ],
       },
     });
