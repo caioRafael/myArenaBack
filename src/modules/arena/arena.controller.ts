@@ -27,8 +27,6 @@ export class ArenaController {
     return this.arenaService.create(createArenaDto as ArenaDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.arenaService.findAll();

@@ -36,6 +36,10 @@ export const CreateArenaSquema = z.object({
   address: z.string(),
   pixKey: z.string(),
   requirePrePayment: z.boolean(),
+  cep: z.string().min(1, 'CEP is required'),
+  city: z.string().min(2, 'City is required'),
+  uf: z.string().min(2, 'UF is required'),
+  locale: z.string().min(1, 'Locale is required'),
 });
 
 export class CreateArenaSchemaDTO extends createZodDto(CreateArenaSquema) {}

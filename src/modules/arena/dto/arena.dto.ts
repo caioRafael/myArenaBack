@@ -20,8 +20,12 @@ export default interface ArenaDto extends Entity {
   address: string;
   employees: UserDto[];
   createdAt?: Date;
-  //administrador usado so na criação
-  administrator?: UserDto;
   pixKey?: string;
   requirePrePayment: boolean;
+  cep: string;
+  city: string;
+  uf: string;
+  locale: string;
+  //administrador usado so na criação
+  administrator?: UserDto;
 }

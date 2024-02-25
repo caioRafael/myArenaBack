@@ -67,6 +67,10 @@ export class ArenaService {
         cnpj: createArenaDto?.cnpj,
         pixKey: createArenaDto?.pixKey,
         requirePrePayment: createArenaDto.requirePrePayment,
+        cep: createArenaDto.cep,
+        city: createArenaDto.city,
+        locale: createArenaDto.locale,
+        uf: createArenaDto.uf,
       },
     });
 
@@ -122,30 +126,6 @@ export class ArenaService {
     const dataAtual = new Date();
     const mesAtual = dataAtual.getMonth() + 1; // +1 porque os meses em JavaScript vão de 0 a 11
     const anoAtual = dataAtual.getFullYear();
-
-    // const arenaReport = await this.prisma.fields.findMany({
-    //   where: {
-    //     arenaId: id,
-    //   },
-    //   include: {
-    //     _count: {
-    //       select: {
-    //         ScheduleTime: {
-    //           where: {
-    //             date: {
-    //               gte: new Date(`${anoAtual}-${mesAtual}-01`),
-    //               lt: new Date(
-    //                 `${mesAtual + 1 === 13 ? anoAtual + 1 : anoAtual}-${
-    //                   mesAtual + 1 === 13 ? 1 : mesAtual + 1
-    //                 }-01`,
-    //               ),
-    //             },
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
 
     const arenaReport = await this.prisma.$queryRaw`
       SELECT 

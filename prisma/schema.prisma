@@ -20,6 +20,10 @@ model Arena {
   logo              String?
   pixKey            String?
   requirePrePayment Boolean
+  cep               String?
+  city              String?
+  uf                String?
+  locale            String?
 
   fields    Fields[]
   employees User[]
