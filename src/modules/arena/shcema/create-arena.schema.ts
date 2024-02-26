@@ -11,13 +11,9 @@ export const CreateUserSquema = z.object({
   phone: z.string({
     required_error: 'phone is required',
   }),
-  email: z
-    .string({
-      required_error: 'administrator email is required',
-    })
-    .email({
-      message: 'invalid email',
-    }),
+  email: z.string({
+    required_error: 'administrator email is required',
+  }),
   password: z.string({
     required_error: 'password is required',
   }),
