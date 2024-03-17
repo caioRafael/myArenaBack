@@ -118,7 +118,11 @@ export class ScheduleService {
   }
 
   async findAvaliableTimes(fieldId: string, date?: Date) {
-    console.log('service', date);
+    const consultDate = `${date.getFullYear()}-${
+      date.getMonth() < 9 ? '0' : ''
+    }${date.getMonth() + 1}-${date.getDate()}`;
+
+    console.log('service', new Date(consultDate));
     const field = await this.prisma.fields.findUnique({
       where: {
         id: fieldId,
