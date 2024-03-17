@@ -130,7 +130,7 @@ export class ScheduleService {
       include: {
         ScheduleTime: {
           where: {
-            date: date,
+            date: new Date(consultDate),
           },
         },
       },
