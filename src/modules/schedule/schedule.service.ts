@@ -118,6 +118,7 @@ export class ScheduleService {
   }
 
   async findAvaliableTimes(fieldId: string, date?: Date) {
+    console.log('service', date);
     const field = await this.prisma.fields.findUnique({
       where: {
         id: fieldId,
@@ -130,6 +131,8 @@ export class ScheduleService {
         },
       },
     });
+
+    console.log(field);
 
     return findHours(field as FieldDto);
   }

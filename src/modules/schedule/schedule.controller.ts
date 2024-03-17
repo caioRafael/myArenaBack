@@ -12,11 +12,12 @@ import { ScheduleService } from './schedule.service';
 import ScheduleDto from './dto/schedule.dto';
 import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
 import { ScheduleGateway } from './schedule.gateway';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { zodToOpenAPI } from 'nestjs-zod';
 import {
   CreateScheduleSchema,
   CreateScheduleSchemaDTO,
+  QueryParam,
 } from './shcema/create-schedule.schema';
 
 interface QueryParam {
@@ -25,6 +26,7 @@ interface QueryParam {
 }
 
 const scheduleSchemaSwagger = zodToOpenAPI(CreateScheduleSchema);
+const queryParamsSchema = zodToOpenAPI(QueryParam);
 
 @ApiTags('schedule')
 @Controller('schedule')
@@ -56,6 +58,7 @@ export class ScheduleController {
     @Param('fieldId') fieldId: string,
     @Query() param: QueryParam,
   ) {
+    console.log('controler', param.date);
     return this.scheduleService.findAvaliableTimes(
       fieldId,
       new Date(param.date),
@@ -63,6 +66,13 @@ export class ScheduleController {
   }
 
   @ApiBearerAuth()
+  @ApiQuery({
+    name: 'date',
+  })
+  @ApiQuery({
+    name: 'code',
+    required: false,
+  })
   @UseGuards(AuthGuard)
   @Get('arena/:arenaId')
   findByArena(@Param('arenaId') arenaId: string, @Query() param: QueryParam) {

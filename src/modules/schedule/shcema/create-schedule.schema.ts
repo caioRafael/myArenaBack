@@ -24,6 +24,11 @@ export const CreateScheduleSchema = z.object({
   }),
 });
 
+export const QueryParam = z.object({
+  date: z.string(),
+  code: z.string().optional(),
+});
+
 export class CreateScheduleSchemaDTO extends createZodDto(
   CreateScheduleSchema,
 ) {}
