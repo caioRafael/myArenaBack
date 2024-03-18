@@ -7,6 +7,7 @@ import {
   Param,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import ScheduleDto from './dto/schedule.dto';
@@ -74,11 +75,16 @@ export class ScheduleController {
     required: false,
   })
   @UseGuards(AuthGuard)
-  @Get('arena/:arenaId')
-  findByArena(@Param('arenaId') arenaId: string, @Query() param: QueryParam) {
+  @Get('arena/:date')
+  findByArena(
+    @Param('date') date: string,
+    @Query() param: QueryParam,
+    @Request() request,
+  ) {
+    const paramDate = new Date(date);
     return this.scheduleService.FindByArena(
-      arenaId,
-      new Date(param.date),
+      request.user.sub,
+      paramDate,
       param.code,
     );
   }
