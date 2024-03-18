@@ -75,16 +75,15 @@ export class ScheduleController {
     required: false,
   })
   @UseGuards(AuthGuard)
-  @Get('arena/:date')
+  @Get('arena/:arenaId')
   findByArena(
     @Param('date') date: string,
     @Query() param: QueryParam,
     @Request() request,
   ) {
-    const paramDate = new Date(date);
     return this.scheduleService.FindByArena(
       request.user.sub,
-      paramDate,
+      new Date(date),
       param.code,
     );
   }
