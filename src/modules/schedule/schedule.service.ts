@@ -82,11 +82,9 @@ export class ScheduleService {
 
   async FindByArena(arenaId: string, date?: Date, code?: string) {
     const data = {
-      date: new Date(date),
+      date,
       code,
     };
-
-    console.log(arenaId);
     const scheduleList = await this.prisma.scheduleTime.findMany({
       where: {
         AND: [data, { field: { arenaId: arenaId } }],
