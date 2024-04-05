@@ -63,9 +63,14 @@ export class UserService {
       where: {
         userId: id,
       },
+      include: {
+        field: {
+          include: {
+            arena: true,
+          },
+        },
+      },
     });
-
-    console.log(schedules);
 
     return schedules;
   }
