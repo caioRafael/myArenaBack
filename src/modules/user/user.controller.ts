@@ -49,6 +49,13 @@ export class UserController {
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
+  @Get('schedule/:id')
+  findSchedulesByUser(@Param('id') id: string) {
+    return this.userService.findSchedulesByUser(id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     return this.userService.update(id, updateUserDto);

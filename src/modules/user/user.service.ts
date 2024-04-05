@@ -58,6 +58,18 @@ export class UserService {
     return user;
   }
 
+  async findSchedulesByUser(id: string) {
+    const schedules = await this.prisma.scheduleTime.findMany({
+      where: {
+        userId: id,
+      },
+    });
+
+    console.log(schedules);
+
+    return schedules;
+  }
+
   async update(id: string, updateUserDto: UserDto) {
     const user = await this.prisma.user.update({
       where: {
