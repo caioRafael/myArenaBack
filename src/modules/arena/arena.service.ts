@@ -148,7 +148,6 @@ export class ArenaService {
       }-01`,
     )}`;
 
-    // console.log(arenaReport);
     return arenaReport[0];
   }
 }

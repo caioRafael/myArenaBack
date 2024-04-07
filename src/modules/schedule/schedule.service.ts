@@ -6,7 +6,6 @@ import { mutateDate } from 'src/utils/manipulateDateTime';
 import verifyConflitDate from 'src/utils/verifyConflitDate';
 import findHours from 'src/utils/findHours';
 import FieldDto from '../fields/dto/field.dto';
-// import findTimes from 'src/utils/findTimes';
 @Injectable()
 export class ScheduleService {
   constructor(private prisma: PrismaService) {}
@@ -183,6 +182,32 @@ export class ScheduleService {
       include: {
         user: true,
         field: true,
+      },
+    });
+
+    return schedule;
+  }
+
+  async cancelSchedule(userId: string, scheduleId: string) {
+    const scheduleUser = await this.prisma.scheduleTime.findUnique({
+      where: {
+        id: scheduleId,
+      },
+    });
+
+    if (scheduleUser.userId !== userId) {
+      throw new HttpException(
+        'Esse horário só pode ser cancelado pelo usuário que agendou',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const schedule = await this.prisma.scheduleTime.update({
+      where: {
+        id: scheduleId,
+        userId: userId,
+      },
+      data: {
+        status: 'CANCEL',
       },
     });
 

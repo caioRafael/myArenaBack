@@ -21,5 +21,6 @@ export default interface ScheduleDto extends Entity {
     | 'FINISHED'
     | 'FINAL_PAYMENT'
     | 'CLOSED'
+    | 'CANCEL'
     | string;
 }

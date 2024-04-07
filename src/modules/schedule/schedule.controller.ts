@@ -7,6 +7,7 @@ import {
   Param,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import ScheduleDto from './dto/schedule.dto';
@@ -109,5 +110,12 @@ export class ScheduleController {
   @Get('code/:code')
   getByCode(@Param('code') code: string) {
     return this.scheduleService.findByCode(code);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Post('cancel/:scheduleId')
+  cancelSchedule(@Param('scheduleId') scheduleId: string, @Request() request) {
+    return this.scheduleService.cancelSchedule(request.user.sub, scheduleId);
   }
 }
