@@ -8,7 +8,7 @@ export default interface ScheduleDto extends Entity {
   endHour?: number;
   amountHours: number;
   userId: string;
-  user: UserDto;
+  user?: UserDto;
   sport: string;
   fieldId: string;
   field?: FieldDto;
