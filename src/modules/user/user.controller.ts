@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from './dto/user.dto';
-import { AuthGuard } from 'src/infra/providers/auth-guard.provider';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   CreateUserSchemaDTO,
   CreateUserSchema,
 } from './schema/create-user.schema';
 import { zodToOpenAPI } from 'nestjs-zod';
+import { AuthGuard } from '../../infra/providers/auth-guard.provider';
 
 const userSchemaSwagger = zodToOpenAPI(CreateUserSchema);
 
