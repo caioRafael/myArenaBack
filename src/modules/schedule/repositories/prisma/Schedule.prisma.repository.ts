@@ -160,4 +160,14 @@ export default class SchedulePrismaRepository implements IScheduleRepository {
 
     return schedule;
   }
+
+  async findSchedule(id: string): Promise<ScheduleDto> {
+    const scheduleUser = await this.prisma.scheduleTime.findUnique({
+      where: {
+        id: id,
+      },
+    });
+
+    return scheduleUser;
+  }
 }

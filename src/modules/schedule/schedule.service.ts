@@ -130,11 +130,7 @@ export class ScheduleService {
   }
 
   async cancelSchedule(userId: string, scheduleId: string) {
-    const scheduleUser = await this.prisma.scheduleTime.findUnique({
-      where: {
-        id: scheduleId,
-      },
-    });
+    const scheduleUser = await this.scheduleRepository.findSchedule(scheduleId);
 
     if (scheduleUser.userId !== userId) {
       throw new HttpException(

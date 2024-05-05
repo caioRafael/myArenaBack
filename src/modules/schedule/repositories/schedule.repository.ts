@@ -21,4 +21,5 @@ export abstract class IScheduleRepository {
     userId: string,
     scheduleId: string,
   ): Promise<ScheduleDto | null>;
+  abstract findSchedule(id: string): Promise<ScheduleDto | null>;
 }

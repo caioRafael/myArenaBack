@@ -2,16 +2,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
 import { PrismaService } from 'src/infra/database/prisma.service';
 import { hash } from 'bcrypt';
+import { IUserRepository } from './repositories/user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private userRepository: IUserRepository,
+  ) {}
   async create(createUserDto: UserDto) {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        email: createUserDto.email,
-      },
-    });
+    const user = await this.userRepository.findUserByEmail(createUserDto.email);
 
     if (user)
       throw new HttpException('Usuário ja existe', HttpStatus.BAD_REQUEST);
@@ -29,70 +29,41 @@ export class UserService {
 
     const password = await hash(createUserDto.password, 10);
 
-    const newUser = await this.prisma.user.create({
-      data: {
-        ...createUserDto,
-        password,
-      },
-    });
+    const data = {
+      ...createUserDto,
+      password,
+    };
+
+    const newUser = await this.userRepository.create(data);
 
     return newUser;
   }
 
   async findAll(arenaId: string) {
-    const users = await this.prisma.user.findMany({
-      where: {
-        arenaId,
-      },
-    });
+    const users = await this.userRepository.findAll(arenaId);
 
     return users;
   }
 
   async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
+    const user = await this.userRepository.findOne(id);
+
     return user;
   }
 
   async findSchedulesByUser(id: string) {
-    const schedules = await this.prisma.scheduleTime.findMany({
-      where: {
-        userId: id,
-      },
-      include: {
-        field: {
-          include: {
-            arena: true,
-          },
-        },
-      },
-    });
+    const schedules = await this.userRepository.findSchedulesByUser(id);
 
     return schedules;
   }
 
   async update(id: string, updateUserDto: UserDto) {
-    const user = await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updateUserDto,
-      },
-    });
+    const user = await this.userRepository.update(id, updateUserDto);
 
     return user;
   }
 
   async remove(id: string) {
-    await this.prisma.user.delete({
-      where: {
-        id,
-      },
-    });
+    await this.userRepository.remove(id);
   }
 }
