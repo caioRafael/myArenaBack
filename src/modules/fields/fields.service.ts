@@ -1,40 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import FieldDto from './dto/field.dto';
-import { PrismaService } from '../../infra/database/prisma.service';
+import { IFieldRepository } from './reositories/field.reosritory';
 
 @Injectable()
 export class FieldsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private fieldReository: IFieldRepository) {}
   async create(createFieldDto: FieldDto) {
-    const field = await this.prisma.fields.create({
-      data: {
-        name: createFieldDto.name,
-        price: createFieldDto.price,
-        openIn: createFieldDto.openIn,
-        closeIn: createFieldDto.closeIn,
-        arenaId: createFieldDto.arenaId,
-        sports: createFieldDto.sports,
-      },
-    });
+    const field = await this.fieldReository.create(createFieldDto);
 
     return field;
   }
 
   async findAll(arenaId: string) {
-    const fields = await this.prisma.fields.findMany({
-      where: {
-        arenaId: arenaId,
-      },
-    });
+    const fields = await this.fieldReository.findAllByArena(arenaId);
     return fields;
   }
 
   async findOne(id: string) {
-    const field = await this.prisma.fields.findUnique({
-      where: {
-        id: id,
-      },
-    });
+    const field = await this.fieldReository.findOne(id);
 
     return field;
   }

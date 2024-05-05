@@ -1,15 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserDto } from './dto/user.dto';
-import { PrismaService } from 'src/infra/database/prisma.service';
 import { hash } from 'bcrypt';
 import { IUserRepository } from './repositories/user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private prisma: PrismaService,
-    private userRepository: IUserRepository,
-  ) {}
+  constructor(private userRepository: IUserRepository) {}
   async create(createUserDto: UserDto) {
     const user = await this.userRepository.findUserByEmail(createUserDto.email);
 

@@ -3,6 +3,8 @@ import { LoginService } from './login.service';
 import { LoginController } from './login.controller';
 import { PrismaService } from '../../infra/database/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
+import { ILoginReository } from './repositories/login.reository';
+import LoginrismaRepository from './repositories/prisma/login.prisma.repository';
 
 @Module({
   imports: [
@@ -13,6 +15,13 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   controllers: [LoginController],
-  providers: [LoginService, PrismaService],
+  providers: [
+    LoginService,
+    PrismaService,
+    {
+      provide: ILoginReository,
+      useClass: LoginrismaRepository,
+    },
+  ],
 })
 export class LoginModule {}
