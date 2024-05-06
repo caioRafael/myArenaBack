@@ -57,13 +57,13 @@ export default class ArenaPrismaRepository implements IArenaRepository {
   async createAdministrator(user: UserDto): Promise<UserDto> {
     const newUser = await this.prisma.user.create({
       data: {
-        email: user.administrator.email,
-        name: user.administrator.name,
-        nickname: user.administrator.nickname,
+        email: user.email,
+        name: user.name,
+        nickname: user.nickname,
         password: user.password,
         profile: user.profile,
         arenaId: user.id,
-        phone: user.administrator.phone,
+        phone: user.phone,
       },
     });
 

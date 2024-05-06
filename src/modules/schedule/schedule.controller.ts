@@ -59,7 +59,6 @@ export class ScheduleController {
     @Param('fieldId') fieldId: string,
     @Query() param: QueryParam,
   ) {
-    console.log('controler', param.date);
     return this.scheduleService.findAvaliableTimes(
       fieldId,
       new Date(param.date),

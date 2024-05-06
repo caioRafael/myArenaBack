@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import ArenaDto, { UserDto } from './dto/arena.dto';
-import { PrismaService } from '../../infra/database/prisma.service';
 import { hash } from 'bcrypt';
 import { IArenaRepository } from './repositories/arena.repository';
 

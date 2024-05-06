@@ -2,21 +2,11 @@ import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
 
 export const CreateUserSquema = z.object({
-  name: z.string({
-    required_error: 'administrator name is required',
-  }),
-  nickname: z.string({
-    required_error: 'nickname is required',
-  }),
-  phone: z.string({
-    required_error: 'phone is required',
-  }),
-  email: z.string({
-    required_error: 'administrator email is required',
-  }),
-  password: z.string({
-    required_error: 'password is required',
-  }),
+  name: z.string().min(1, 'administrator name is required'),
+  nickname: z.string().min(1, 'nickname is required'),
+  phone: z.string().min(1, 'phone is required'),
+  email: z.string().min(1, 'administrator email is required'),
+  password: z.string().min(1, 'password is required'),
 });
 
 export const CreateArenaSquema = z.object({

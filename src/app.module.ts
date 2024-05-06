@@ -15,7 +15,6 @@ import { UserModule } from './modules/user/user.module';
   controllers: [],
   providers: [
     AppService,
-    ArenaService,
     PrismaService,
     {
       provide: APP_PIPE,
