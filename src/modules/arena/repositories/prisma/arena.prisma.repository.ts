@@ -62,7 +62,7 @@ export default class ArenaPrismaRepository implements IArenaRepository {
         nickname: user.nickname,
         password: user.password,
         profile: user.profile,
-        arenaId: user.id,
+        arenaId: user.arenaId,
         phone: user.phone,
       },
     });
@@ -89,6 +89,8 @@ export default class ArenaPrismaRepository implements IArenaRepository {
         employees: true,
       },
     });
+
+    console.log(arena);
 
     return arena;
   }

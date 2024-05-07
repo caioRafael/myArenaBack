@@ -94,6 +94,8 @@ export class ArenaService {
   async findByUser(userId: string) {
     const arena = await this.arenaReository.findByUser(userId);
 
+    console.log(arena);
+
     return arena;
   }
 
