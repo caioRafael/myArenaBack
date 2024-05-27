@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { IUserRepository } from '../user.repository';
 import { PrismaService } from 'src/infra/database/prisma.service';
-import { UserDto } from '../../dto/user.dto';
+import { FileDto, UserDto } from '../../dto/user.dto';
 import ScheduleDto from 'src/modules/schedule/dto/schedule.dto';
+import { IStorage } from 'src/infra/providers/storage/storage';
 
 @Injectable()
 export default class UserPrismaRepository implements IUserRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private storage: IStorage) {}
 
   async create(data: UserDto): Promise<UserDto> {
     const newUser = await this.prisma.user.create({
@@ -81,5 +82,34 @@ export default class UserPrismaRepository implements IUserRepository {
     });
 
     return user;
+  }
+
+  async upload(file: FileDto, userId: string): Promise<UserDto> {
+    const avatarUrl = await this.storage.upload(file);
+
+    if (!avatarUrl)
+      throw new HttpException('Usuário ja existe', HttpStatus.BAD_REQUEST);
+    const user = await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        avatar: avatarUrl,
+      },
+    });
+    return user;
+  }
+
+  async deleteAvatar(userId: any, avatarUrl: any): Promise<void> {
+    await this.storage.delete(avatarUrl);
+
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        avatar: null,
+      },
+    });
   }
 }

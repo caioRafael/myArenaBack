@@ -10,3 +10,12 @@ export interface UserDto extends Entity {
   arenaId?: string;
   profile: 'ADMINISTRATOR' | 'EMPLOYEE' | 'CLIENT' | string;
 }
+
+export interface FileDto {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
+}

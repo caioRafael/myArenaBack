@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserDto } from './dto/user.dto';
+import { FileDto, UserDto } from './dto/user.dto';
 import { hash } from 'bcrypt';
 import { IUserRepository } from './repositories/user.repository';
 
@@ -61,5 +61,15 @@ export class UserService {
 
   async remove(id: string) {
     await this.userRepository.remove(id);
+  }
+
+  async upload(file: FileDto, userId: string) {
+    const user = await this.userRepository.upload(file, userId);
+
+    return user;
+  }
+
+  async deleteAvatar(userId: string, fileUrl: string) {
+    await this.userRepository.deleteAvatar(userId, fileUrl);
   }
 }

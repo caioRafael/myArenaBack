@@ -90,8 +90,6 @@ export default class ArenaPrismaRepository implements IArenaRepository {
       },
     });
 
-    console.log(arena);
-
     return arena;
   }
 
