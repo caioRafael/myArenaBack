@@ -1,5 +1,6 @@
-import ScheduleDto from 'src/modules/schedule/dto/schedule.dto';
-import { UserDto } from '../../dto/user.dto';
+// import ScheduleDto from 'src/modules/schedule/dto/schedule.dto';
+import ScheduleDto from '../../../schedule/dto/schedule.dto';
+import { FileDto, UserDto } from '../../dto/user.dto';
 import { IUserRepository } from '../user.repository';
 import { randomUUID } from 'crypto';
 
@@ -44,6 +45,14 @@ export default class UserInMemoryRepository implements IUserRepository {
     return updatedUser;
   }
   remove(id: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+
+  upload(file: FileDto): Promise<UserDto> {
+    throw new Error('Method not implemented.');
+  }
+
+  deleteAvatar(userId: string, avatarUrl: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }

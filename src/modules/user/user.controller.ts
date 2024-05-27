@@ -7,9 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Put,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto } from './dto/user.dto';
+import { FileDto, UserDto } from './dto/user.dto';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   CreateUserSchemaDTO,
@@ -17,6 +21,7 @@ import {
 } from './schema/create-user.schema';
 import { zodToOpenAPI } from 'nestjs-zod';
 import { AuthGuard } from '../../infra/providers/auth-guard.provider';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 const userSchemaSwagger = zodToOpenAPI(CreateUserSchema);
 
@@ -66,5 +71,23 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
+  }
+
+  //falta adicionar url no banco
+  @Put('upload')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async upload(@UploadedFile() file: FileDto, @Request() request) {
+    return await this.userService.upload(file, request.user.sub);
+  }
+
+  @Put('delete-avatar')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async deleteAvatar(@Body() fileUrl: { fileUrl: string }, @Request() request) {
+    return await this.userService.deleteAvatar(
+      request.user.sub,
+      fileUrl.fileUrl,
+    );
   }
 }

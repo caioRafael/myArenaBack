@@ -22,11 +22,6 @@ export class ScheduleGateway {
 
   @SubscribeMessage('findSchedules')
   async findSchedules() {
-    // const schedules = await this.scheduleService.FindByArena(
-    //   data.arenaId,
-    //   new Date(data.date),
-    // );
-    // console.log('agendamento', schedules);
     this.server.emit('findSchedules', true);
   }
 }
