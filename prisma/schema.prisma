@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Arena {
+  id                String  @id @default(uuid())
+  fantasyName       String
+  corporateName     String? @unique
+  cnpj              String? @unique
+  phone             String  @unique
+  address           String
+  logo              String?
+  pixKey            String?
+  requirePrePayment Boolean
+  cep               String?
+  city              String?
+  uf                String?
+  locale            String?
+
+  fields    Fields[]
+  employees User[]
+
+  createdAt DateTime @default(now())
+
+  @@map("arena")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  nickname String
+  profile  String
+  phone    String
+  avatar   String?
+  email    String  @unique
+  password String
+
+  arenaId      String?
+  arena        Arena?         @relation(fields: [arenaId], references: [id])
+  createdAt    DateTime       @default(now())
+  ScheduleTime ScheduleTime[]
+
+  @@map("user")
+}
+
+model Fields {
+  id      String @id @default(uuid())
+  name    String
+  price   Float
+  openIn  Float
+  closeIn Float
+  sports  String
+
+  arenaId      String
+  arena        Arena          @relation(fields: [arenaId], references: [id])
+  ScheduleTime ScheduleTime[]
+
+  @@map("fields")
+}
+
+model ScheduleTime {
+  id          String   @id @default(uuid())
+  date        DateTime
+  hour        Float
+  endHour     Float
+  amountHours Int
+  sport       String
+  price       Float
+  status      String
+  code        String   @unique
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  fieldId String
+  field   Fields @relation(fields: [fieldId], references: [id])
+
+  @@map("shcedule_time")
+}
