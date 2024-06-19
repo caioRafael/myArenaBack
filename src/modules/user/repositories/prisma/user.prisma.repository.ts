@@ -106,4 +106,14 @@ export default class UserPrismaRepository implements IUserRepository {
       },
     });
   }
+
+  async findUserByEmailOrPhone(email: string, phone: string): Promise<UserDto> {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        OR: [{ email: email }, { phone: phone }],
+      },
+    });
+
+    return user;
+  }
 }

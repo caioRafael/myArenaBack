@@ -11,4 +11,8 @@ export abstract class IUserRepository {
   abstract remove(id: string): Promise<void>;
   abstract upload(avatarUrl: string, userId: string): Promise<UserDto>;
   abstract deleteAvatar(userId: string): Promise<void>;
+  abstract findUserByEmailOrPhone(
+    email: string,
+    phone: string,
+  ): Promise<UserDto>;
 }

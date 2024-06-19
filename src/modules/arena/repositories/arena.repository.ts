@@ -1,10 +1,6 @@
 import ArenaDto, { UserDto } from '../dto/arena.dto';
 
 export abstract class IArenaRepository {
-  abstract findUserByEmailOrPhone(
-    email: string,
-    phone: string,
-  ): Promise<UserDto>;
   abstract findArenaByCnpjOrPhoneOrCorporateName(
     cnpj: string,
     phone: string,

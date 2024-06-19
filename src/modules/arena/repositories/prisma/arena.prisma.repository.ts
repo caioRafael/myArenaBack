@@ -7,16 +7,6 @@ import ArenaDto, { UserDto } from '../../dto/arena.dto';
 export default class ArenaPrismaRepository implements IArenaRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findUserByEmailOrPhone(email: string, phone: string): Promise<UserDto> {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        OR: [{ email: email }, { phone: phone }],
-      },
-    });
-
-    return user;
-  }
-
   async findArenaByCnpjOrPhoneOrCorporateName(
     cnpj: string,
     phone: string,
