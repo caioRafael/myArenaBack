@@ -1,9 +1,9 @@
+import { CreateScheduleUseCase } from './useCases/create-schedule.usecase';
 import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { ScheduleService } from './schedule.service';
 import { Server } from 'socket.io';
 
 // interface SchedulesData {
@@ -17,7 +17,7 @@ import { Server } from 'socket.io';
   },
 })
 export class ScheduleGateway {
-  constructor(private readonly scheduleService: ScheduleService) {}
+  constructor(private readonly createScheduleUseCase: CreateScheduleUseCase) {}
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('findSchedules')
